@@ -13,29 +13,33 @@ public class Shapes extends JComponent{
     double[] ballSpeed = new double[2];
     int frameWidth;
     int frameHeight;
-    
+    /**
+     * 
+     * @param index which paddle 0-1
+     * @param y what acceleration
+     */
     public void setAccelerationPaddle(int index, double y){
         Paddle specificShape = paddles.get(index);
         specificShape.acceleration = y;
     }
+    /**
+     * resets acceleration on all paddles
+     */
     public void resetAccelerationPaddle(){
         for (Paddle paddle : paddles) {
             paddle.acceleration = 0;
         }
     }
+    /**
+     * public constructor for new paddle, coordinates are top-left corner
+     * @param x position 
+     * @param y position
+     * @param w width
+     * @param h heigth
+     */
     public void newPaddle(int x, int y, int w, int h){
         new Paddle(x,y,w,h);
-    }
-    public void setPositionPaddle(int index, int x, int y){
-            Paddle specificShape = paddles.get(index);
-            specificShape.position[0] = x;
-            specificShape.position[1] = y;
-    }  
-    public void setSizePaddle(int index, int w, int h){
-            Paddle specificShape = paddles.get(index);
-            specificShape.size[0] = w;
-            specificShape.size[1] = h;
-    }        
+    } 
     private class Paddle {
         int[] size = new int[2];
         double[] position = new double[2];
@@ -49,17 +53,25 @@ public class Shapes extends JComponent{
             paddles.add(this);
         }
     }
+    /**
+     * constructor for new ball, position is in the center of the ball
+     * @param x position
+     * @param y position
+     * @param r radius
+     */
     public void newBall(int x, int y, int r){
         new Ball(x,y,r);
     }
+    /**
+     * sets position of the ball
+     * @param index which ball
+     * @param x position
+     * @param y position
+     */
     public void setPositionBall(int index, int x, int y){
             Ball specificShape = balls.get(index);
             specificShape.position[0] = x;
             specificShape.position[1] = y;
-    }  
-    public void setSizeBall(int index, int r){
-            Ball specificShape = balls.get(index);
-            specificShape.radius = r;
     }
     private class Ball {
         int radius;
@@ -91,7 +103,6 @@ public class Shapes extends JComponent{
         repaint();
         }
     }
-    
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.WHITE);

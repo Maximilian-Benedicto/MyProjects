@@ -25,8 +25,8 @@ public class App {
         frame.getContentPane().setBackground(Color.BLACK);
         shapes.frameWidth = frame.getContentPane().getWidth();
         shapes.frameHeight = frame.getContentPane().getWidth();
-        shapes.paddleIncrement = paddleIncrement;
         shapes.ballSpeed = ballSpeed;
+        shapes.paddleIncrement = paddleIncrement;
         shapes.newPaddle(0, 0, 10, 100);
         shapes.newPaddle(shapes.frameWidth - 10, 0, 10, 100);
         shapes.newBall((frameHeight / 2) - 5, (frameWidth / 2) - 5, 10);
