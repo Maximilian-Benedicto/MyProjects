@@ -12,7 +12,7 @@ public class App {
     public static void main(String[] args) throws Exception {
         shapes = new Shapes();
         JFrame frame = new JFrame();
-        final int frameWidth = 500;
+        final int frameWidth = 500;;
         final int frameHeight = 500;
         final double paddleIncrement = 0.5;
         final double[] ballSpeed = {2.3,4.1};
@@ -20,7 +20,7 @@ public class App {
         frame.setTitle("Pong");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-        frame.setResizable(true);
+        frame.setResizable(false);
         frame.add(shapes);
         frame.getContentPane().setBackground(Color.BLACK);
         shapes.frameWidth = frame.getContentPane().getWidth();
@@ -53,7 +53,6 @@ public class App {
             shapes.updateGraphics();
         }
     }
-
     private static void handleSimultaneousInput() {
         if (pressedKeys.contains(KeyEvent.VK_UP)) {
             shapes.setAccelerationPaddle(1, -shapes.paddleIncrement);
