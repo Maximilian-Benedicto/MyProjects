@@ -12,20 +12,19 @@ public class App {
         frame.setVisible(true);
         frame.add(shapes);
         frame.setResizable(false); 
-        shapes.newRectangle(30,10,10,10);
-        shapes.newRectangle(10,10,10,10);
+        shapes.newPaddle(10,10,10,10);
+        shapes.newPaddle(10,10,10,10);
         int x = 0;
         int y = 0;
         for (int index = 0; index < 500; index++) {
             shapes.setPosition(0, x, y);
+            shapes.setSize(0, x, y);
             Thread.sleep(10);
             x++;
             y++;
             shapes.updateGraphics();
         }
-        shapes.setPosition(0, 50, 50);
-        shapes.setSize(1, 40, 40);
-        shapes.newRectangle(10,10,10,10);
-        
+
+           
     }
 }

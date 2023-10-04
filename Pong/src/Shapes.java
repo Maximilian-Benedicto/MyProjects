@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Shapes extends JComponent{
     public ArrayList<Paddle> paddles = new ArrayList<>();
 
-    public void newRectangle(int x, int y, int w, int h){
+    public void newPaddle(int x, int y, int w, int h){
         new Paddle(x,y,w,h);
     }
 
@@ -22,13 +22,14 @@ public class Shapes extends JComponent{
 
     public void setSize(int index, int x, int y){
             Paddle specificShape = paddles.get(index);
-            specificShape.position[0] = x;
-            specificShape.position[1] = y;
+            specificShape.size[0] = x;
+            specificShape.size[1] = y;
     }  
             
     private class Paddle {
         int[] size = new int[2];
         int[] position = new int[2];
+        Color color = new Color(123);
         public Paddle(int x, int y, int w, int h){
             position[0] = x;
             position[1] = y;
