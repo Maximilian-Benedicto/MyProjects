@@ -1,3 +1,5 @@
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.*;
 import java.awt.Color;
 import java.awt.event.KeyAdapter;
@@ -7,30 +9,41 @@ import java.util.Set;
 
 public class App {
     private static Set<Integer> pressedKeys = new HashSet<>();
-    private static Shapes shapes; //creates a class field that can be modified outside of main method
+    private static Game game; //creates a class field that can be modified outside of main method
+
+    static class GameLoop extends TimerTask{
+        @Override
+        public void run(){
+            game.updateGraphics();
+            if (game.score[0]==5) {
+                game.removeBalls();
+                System.out.println("Player 0 wins!!!");
+            }
+            if (game.score[1]==5) {
+                game.removeBalls();
+                System.out.println("Player 1 wins!!!");
+            }
+        }
+    }
 
     public static void main(String[] args) throws Exception {
-        shapes = new Shapes();
+        Timer timer = new Timer();
+        game = new Game();
         JFrame frame = new JFrame();
         final int frameWidth = 500;;
         final int frameHeight = 500;
         final double paddleIncrement = 0.5;
-        final double[] ballSpeed = {2.3,4.1};
+        final double[] ballSpeed = {3,0};
+        final int paddleSize = 100;
+        final int paddleWidth = 10;
+        final double ballVerticalAcceleration = 0.1;
         frame.setSize(frameWidth, frameHeight);
         frame.setTitle("Pong");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setResizable(false);
-        frame.add(shapes);
+        frame.add(game);
         frame.getContentPane().setBackground(Color.BLACK);
-        shapes.frameWidth = frame.getContentPane().getWidth();
-        shapes.frameHeight = frame.getContentPane().getHeight();
-        shapes.ballSpeed = ballSpeed;
-        shapes.paddleIncrement = paddleIncrement;
-        shapes.newPaddle(0, 0, 10, 100);
-        shapes.newPaddle(shapes.frameWidth - 10, 0, 10, 100);
-        shapes.newBall((frameHeight / 2) - 5, (frameWidth / 2) - 5, 10);
-
         frame.addKeyListener(new KeyAdapter() {
             @Override //overrides method defined in KeyListener
             public void keyPressed(KeyEvent e) {
@@ -44,27 +57,36 @@ public class App {
                 int keyCode = e.getKeyCode();
                 pressedKeys.remove(keyCode);
                 handleSimultaneousInput();
-                shapes.resetAccelerationPaddle();
+                game.resetAccelerationPaddle();
             }
         });
 
-        while (true) {
-            Thread.sleep(10);
-            shapes.updateGraphics();
-        }
+        game.frameWidth = frame.getContentPane().getWidth();
+        game.frameHeight = frame.getContentPane().getHeight();
+        game.ballSpeed = ballSpeed;
+        game.paddleIncrement = paddleIncrement;
+        game.paddleSize = paddleSize;
+        game.paddleWidth = paddleWidth;
+        game.ballVerticalAcceleration = ballVerticalAcceleration;
+        game.newPaddle(0, 0, paddleWidth, paddleSize,0);
+        game.newPaddle(game.frameWidth - 10, 0, paddleWidth, paddleSize,1);
+        game.newBall((frameHeight / 2), (frameWidth / 2), 10);
+
+        timer.scheduleAtFixedRate(new GameLoop(), 0, 1000/60);
     }
+
     private static void handleSimultaneousInput() {
         if (pressedKeys.contains(KeyEvent.VK_UP)) {
-            shapes.setAccelerationPaddle(1, -shapes.paddleIncrement);
+            game.setAccelerationPaddle(1, -game.paddleIncrement);
         }
         if (pressedKeys.contains(KeyEvent.VK_DOWN)) {
-            shapes.setAccelerationPaddle(1, shapes.paddleIncrement);
+            game.setAccelerationPaddle(1, game.paddleIncrement);
         }
         if (pressedKeys.contains(KeyEvent.VK_W)) {
-            shapes.setAccelerationPaddle(0, -shapes.paddleIncrement);
+            game.setAccelerationPaddle(0, -game.paddleIncrement);
         }
         if (pressedKeys.contains(KeyEvent.VK_S)) {
-            shapes.setAccelerationPaddle(0, shapes.paddleIncrement);
+            game.setAccelerationPaddle(0, game.paddleIncrement);
         }
     }
 }

@@ -5,22 +5,25 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
-public class Shapes extends JComponent{
+public class Game extends JComponent{
     public ArrayList<Paddle> paddles = new ArrayList<>();
     public ArrayList<Ball> balls = new ArrayList<>();
 
     double paddleIncrement;
+    double ballVerticalAcceleration;
     double[] ballSpeed = new double[2];
     int frameWidth;
     int frameHeight;
+    int paddleSize;
+    int paddleWidth;
+    int[] score = new int[2];
     /**
      * 
      * @param index which paddle 0-1
      * @param y what acceleration
      */
     public void setAccelerationPaddle(int index, double y){
-        Paddle specificShape = paddles.get(index);
-        specificShape.acceleration = y;
+        paddles.get(index).acceleration = y;
     }
     /**
      * resets acceleration on all paddles
@@ -37,20 +40,20 @@ public class Shapes extends JComponent{
      * @param w width
      * @param h heigth
      */
-    public void newPaddle(int x, int y, int w, int h){
-        new Paddle(x,y,w,h);
+    public void newPaddle(int x, int y, int w, int h, int index){
+        new Paddle(x,y,w,h,index);
     } 
     private class Paddle {
         int[] size = new int[2];
         double[] position = new double[2];
         double speed = 0;
         double acceleration = 0;
-        public Paddle(int x, int y, int w, int h){
+        public Paddle(int x, int y, int w, int h, int index){
             position[0] = x;
             position[1] = y;
             size[0] = w;
             size[1] = h;
-            paddles.add(this);
+            paddles.add(index, this);
         }
     }
     /**
@@ -62,16 +65,8 @@ public class Shapes extends JComponent{
     public void newBall(int x, int y, int r){
         new Ball(x,y,r);
     }
-    /**
-     * sets position of the ball
-     * @param index which ball
-     * @param x position
-     * @param y position
-     */
-    public void setPositionBall(int index, int x, int y){
-            Ball specificShape = balls.get(index);
-            specificShape.position[0] = x;
-            specificShape.position[1] = y;
+    public void removeBalls(){
+        balls.removeAll(balls);
     }
     private class Ball {
         int radius;
@@ -84,6 +79,38 @@ public class Shapes extends JComponent{
             balls.add(this);
         }
     }
+    /**
+     * Checks collisions and detects if player has scored
+     * @param ball to check and move
+     * @return which player has scored (0 or 1) or 3 if no one has scored
+     */
+    public Integer ballCollision(Ball ball){
+        if (ball.position[1] <= 0 || ball.position[1] >= frameHeight) {
+                ball.speed[1] = -ballSpeed[1];
+        } 
+        if (ball.position[0] < 10 || ball.position[0] > frameWidth - 10) {
+            if (ball.position[0] <= 0 || ball.position[0] >= frameWidth) {
+                if (ball.position[0] <= 0) {
+                    ball.position[0] = frameWidth/2;
+                    ball.position[1] = frameHeight/2;
+                    return(1);
+                } else if (ball.position[0] >= frameWidth) {
+                    ball.position[0] = frameWidth/2;
+                    ball.position[1] = frameHeight/2;
+                    return(0);
+                }
+            } else {
+                if (ball.position[0] < paddleWidth && (ball.position[1] > paddles.get(0).position[1] && ball.position[1] < paddles.get(0).position[1] + paddleSize )) {
+                    ball.speed[1] += paddles.get(0).speed * ballVerticalAcceleration;
+                    ball.speed[0] = -ball.speed[0];
+                } else if (ball.position[0] > frameWidth - paddleWidth && (ball.position[1] > paddles.get(1).position[1] && ball.position[1] < paddles.get(1).position[1] + paddleSize )) {
+                    ball.speed[1] += paddles.get(1).speed * ballVerticalAcceleration;
+                    ball.speed[0] = -ball.speed[0];
+                }
+            }       
+        }
+        return(3);
+    } 
     public void updateGraphics(){
         for (Paddle paddle : paddles) {
             paddle.speed += paddle.acceleration;
@@ -93,15 +120,13 @@ public class Shapes extends JComponent{
         for (Ball ball : balls) {
             ball.position[0] += ball.speed[0];
             ball.position[1] += ball.speed[1];
-            if (ball.position[0] <= 0 || ball.position[0] >= frameWidth) {
-                ball.speed[0] = -ballSpeed[0];
-            } 
-            if (ball.position[1] <= 0 || ball.position[1] >= frameHeight) {
-                ball.speed[1] = -ballSpeed[1];
-            } 
-            
-        repaint();
+            int ballCollision = ballCollision(ball);
+            if (!(ballCollision==3)) {
+                score[ballCollision]++;
+                System.out.println("Score -->   player 0: "+score[0]+"player 1: "+score[1]);
+            }
         }
+        repaint();
     }
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
@@ -115,5 +140,4 @@ public class Shapes extends JComponent{
             g2d.fill(e);
         }    
     }
-
 }
