@@ -11,6 +11,7 @@ public class Game extends JComponent{
 
     double paddleIncrement;
     double ballVerticalAcceleration;
+    double paddleBounce;
     double[] ballSpeed = new double[2];
     int frameWidth;
     int frameHeight;
@@ -116,6 +117,10 @@ public class Game extends JComponent{
             paddle.speed += paddle.acceleration;
             paddle.position[1] += paddle.speed;
             paddle.position[1] = Math.max(0,Math.min(frameHeight-paddle.size[1],paddle.position[1]));
+            if (paddle.position[1]==0 || paddle.position[1]==frameHeight-paddle.size[1]) {
+                paddle.speed = -paddleBounce*paddle.speed;
+                paddle.acceleration = 0;
+            }
         }
         for (Ball ball : balls) {
             ball.position[0] += ball.speed[0];

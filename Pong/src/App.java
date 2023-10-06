@@ -37,6 +37,7 @@ public class App {
         final int paddleSize = 100;
         final int paddleWidth = 10;
         final double ballVerticalAcceleration = 0.1;
+        final double paddleBounce = 0.3;
         frame.setSize(frameWidth, frameHeight);
         frame.setTitle("Pong");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -68,6 +69,7 @@ public class App {
         game.paddleSize = paddleSize;
         game.paddleWidth = paddleWidth;
         game.ballVerticalAcceleration = ballVerticalAcceleration;
+        game.paddleBounce = paddleBounce;
         game.newPaddle(0, 0, paddleWidth, paddleSize,0);
         game.newPaddle(game.frameWidth - 10, 0, paddleWidth, paddleSize,1);
         game.newBall((frameHeight / 2), (frameWidth / 2), 10);
