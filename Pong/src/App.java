@@ -33,7 +33,7 @@ public class App {
         final int frameWidth = 500;;
         final int frameHeight = 500;
         final double paddleIncrement = 0.5;
-        final double[] ballSpeed = {3,0};
+        final double[] ballSpeed = {3,4};
         final int paddleSize = 100;
         final int paddleWidth = 10;
         final double ballVerticalAcceleration = 0.1;

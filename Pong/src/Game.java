@@ -103,10 +103,10 @@ public class Game extends JComponent{
             } else {
                 if (ball.position[0] < paddleWidth && (ball.position[1] > paddles.get(0).position[1] && ball.position[1] < paddles.get(0).position[1] + paddleSize )) {
                     ball.speed[1] += paddles.get(0).speed * ballVerticalAcceleration;
-                    ball.speed[0] = -ball.speed[0];
+                    ball.speed[0] *= -1;
                 } else if (ball.position[0] > frameWidth - paddleWidth && (ball.position[1] > paddles.get(1).position[1] && ball.position[1] < paddles.get(1).position[1] + paddleSize )) {
                     ball.speed[1] += paddles.get(1).speed * ballVerticalAcceleration;
-                    ball.speed[0] = -ball.speed[0];
+                    ball.speed[0] *= -1;
                 }
             }       
         }
