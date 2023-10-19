@@ -87,7 +87,7 @@ public class Game extends JComponent{
      */
     public Integer ballCollision(Ball ball){
         if (ball.position[1] <= 0 || ball.position[1] >= frameHeight) {
-                ball.speed[1] = -ballSpeed[1];
+                ball.speed[1] *= -1;
         } 
         if (ball.position[0] < 10 || ball.position[0] > frameWidth - 10) {
             if (ball.position[0] <= 0 || ball.position[0] >= frameWidth) {
