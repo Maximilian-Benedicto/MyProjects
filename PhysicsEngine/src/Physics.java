@@ -62,10 +62,10 @@ public class Physics {
                         ballA.position[1] += deltaY/2;
                         ballB.position[0] -= deltaX/2;
                         ballB.position[1] -= deltaY/2;
-                        ballA.acceleration[0] += deltaX/2;
+                        /*ballA.acceleration[0] += deltaX/2;
                         ballA.acceleration[1] += deltaY/2;
                         ballB.acceleration[0] -= deltaX/2;
-                        ballB.acceleration[1] -= deltaY/2;
+                        ballB.acceleration[1] -= deltaY/2;*/
                         /*System.out.println("BallA: " + ballA + " and ballB: " + ballB + " just collided!");
                         System.out.println("distanceBetweenBalls: " + distanceBetweenBalls);
                         System.out.println("slopeBetweenBalls: " + slopeBetweenBalls);
