@@ -1,19 +1,24 @@
 import javax.swing.JFrame;
-import java.awt.*;
+import java.awt.Color;
 
 public class Frame{
-    public static int frameWidth;
-    public static int frameHeigth;
+    public int getFrameWidth(){
+        return App.visual.getWidth();
+    }
+
+    public int getFrameHeigth(){
+        return App.visual.getHeight();
+    }
+
+
 
     public Frame(int frameWidth, int frameHeigth){
-        this.frameWidth = frameWidth;
-        this.frameHeigth = frameHeigth; 
         JFrame window = new JFrame();
         window.setSize(frameWidth, frameHeigth);
         window.setTitle("PhysicsEngine");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setVisible(true);
-        window.setResizable(false);
+        window.setResizable(true);
         window.add(App.visual);
         window.getContentPane().setBackground(Color.BLUE);
     }
