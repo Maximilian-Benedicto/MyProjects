@@ -2,6 +2,8 @@ import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -14,18 +16,21 @@ public class Visual extends JFrame {
 
     JLayeredPane gameLayeredPane = new JLayeredPane();
     ImageIcon backgroundImageIcon = new ImageIcon("png/background.png");
-    ImageIcon pipeImageIcon = scaleImageIcon(new ImageIcon("png/pipe.png"), 2);
+    ImageIcon pipeImageIcon = scaleImageIcon("png/pipe.png", 2);
+    ImageIcon birdImageIcon = scaleImageIcon("png/bird.png", 2);
     Background b1;
     Background b2;
-    Pipe p1;
-    Pipe p2;
-    Pipe p3;
+    int numberOfPipes = 3;
     Timer timer;
-    int delay = 16;
+    int backgroundSpeed = -1;
+    int pipeSpeed = -2;
+    int gameSpeed = 16;
+    Random random = new Random();
 
-    private ImageIcon scaleImageIcon(ImageIcon imageIcon, int scale) {
+    private ImageIcon scaleImageIcon(String filePath, int scale) {
+        ImageIcon imageIcon = new ImageIcon(filePath);
         Image image = imageIcon.getImage();
-        image.getScaledInstance(imageIcon.getIconWidth() * scale, imageIcon.getIconHeight() * scale,
+        image = image.getScaledInstance(imageIcon.getIconWidth() * scale, imageIcon.getIconHeight() * scale,
                 Image.SCALE_SMOOTH);
         return new ImageIcon(image);
     }
@@ -64,13 +69,13 @@ public class Visual extends JFrame {
         return null;
     }
 
-    public void setScrollingSpeed(int delay) {
-        this.delay = delay;
+    public void setGameSpeed(int gameSpeed) {
+        this.gameSpeed = gameSpeed;
     }
 
     public Visual() {
         setTitle("Flappy Bird");
-        setResizable(false);
+        setResizable(true);
         setSize(frameWidth, frameHeight);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -80,20 +85,36 @@ public class Visual extends JFrame {
         gameLayeredPane.add(b1, JLayeredPane.DEFAULT_LAYER);
         gameLayeredPane.add(b2, JLayeredPane.DEFAULT_LAYER);
 
+        Pipe[] pipes = new Pipe[numberOfPipes];
+        for (int index = 0; index < numberOfPipes; index++) {
+            int xPosition = (((index) * frameWidth) / numberOfPipes);
+            int yPosition = -250;
+            pipes[index] = new Pipe(xPosition, yPosition);
+            gameLayeredPane.add(pipes[index], JLayeredPane.PALETTE_LAYER);
+        }
+
         setContentPane(gameLayeredPane);
 
-        timer = new Timer(delay, new ActionListener() {
+        timer = new Timer(gameSpeed, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                b1.moveX(-1);
-                b2.moveX(-1);
+                b1.moveX(backgroundSpeed);
+                b2.moveX(backgroundSpeed);
 
                 if (b1.getLocation().getX() <= -backgroundImageIcon.getIconWidth()) {
-                    b1.setLocation(frameWidth, 0);
+                    b1.setX(frameWidth);
                 }
                 if (b2.getLocation().getX() <= -backgroundImageIcon.getIconWidth()) {
-                    b2.setLocation(frameWidth, 0);
+                    b2.setX(frameWidth);
                 }
+
+                for (Pipe pipe : pipes) {
+                    pipe.moveX(pipeSpeed);
+                    if (pipe.getLocation().getX() <= -pipeImageIcon.getIconWidth()) {
+                        pipe.setLocation(frameWidth, -random.nextInt(150,350));
+                    }
+                }
+
             }
         });
 
